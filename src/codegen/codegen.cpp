@@ -34,7 +34,6 @@ shared_ptr<CodeGen> CodeGen::init_default(std::ostream &dest, OutputKind outputK
   }
   #ifdef HAVE_LLVM
   else if (should_use_LLVM_codegen()){
-    std::cout << "using LLVM codegen\n";
     return make_shared<CodeGen_LLVM>(dest, outputKind);
   }
   #endif
