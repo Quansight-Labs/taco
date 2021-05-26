@@ -3,7 +3,7 @@ project(taco)
 option(CUDA "Build for NVIDIA GPU (CUDA must be preinstalled)" OFF)
 option(PYTHON "Build TACO for python environment" OFF)
 option(OPENMP "Build with OpenMP execution support" OFF)
-option(LLVM "Build with LLVM backend support")
+option(LLVM "Build with LLVM backend support" OFF)
 
 
 if(CUDA)
@@ -30,6 +30,7 @@ if (LLVM)
   llvm_map_components_to_libnames(llvm_libs support core irreader)
   add_definitions(-DUSE_LLVM)
   add_definitions(-DENABLE_TOSTRING_LLVM)
+  add_definitions(-DHAVE_LLVM)
 endif(LLVM)
 
 SET(CMAKE_CONFIGURATION_TYPES "Release;Debug;MinSizeRel;RelWithDebInfo")
