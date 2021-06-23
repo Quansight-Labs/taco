@@ -414,7 +414,7 @@ void CodeGen_LLVM::visit(const For *op) {
   llvm::BasicBlock *exit =
       llvm::BasicBlock::Create(this->Context, "for_exit", this->F);
 
-  this->Builder->CreateBr(header); // pre-header -> header
+  this->Builder->CreateBr(header); // pre-header -> latch
 
   this->Builder->SetInsertPoint(header);
 
@@ -424,23 +424,24 @@ void CodeGen_LLVM::visit(const For *op) {
       this->Builder->CreatePHI(start->getType(), 2 /* num values */, var->name);
   pushSymbol(var->name, phi);
 
-  // Compute exit condition
+  // Compute condition
   auto cond = this->Builder->CreateICmpSLT(phi, end);
-  this->Builder->CreateCondBr(cond, body, exit);
-
-  // Compute increment and jump back to header
-  this->Builder->SetInsertPoint(latch);
-  auto incr = this->Builder->CreateAdd(phi, codegen(op->increment));
-  this->Builder->CreateBr(header);  // latch -> header
-
-  // Add values to the PHI node
-  phi->addIncoming(start, pre_header);
-  phi->addIncoming(incr, latch);
+  this->Builder->CreateCondBr(cond, body, exit); // latch -> body
 
   // Connect body to latch
   this->Builder->SetInsertPoint(body);
   op->contents.accept(this);
   this->Builder->CreateBr(latch); // body -> latch
+
+  // Compute increment
+  this->Builder->SetInsertPoint(latch);
+  auto incr = this->Builder->CreateAdd(phi, codegen(op->increment));
+
+  // Add values to the PHI node
+  phi->addIncoming(start, pre_header);
+  phi->addIncoming(incr, latch);
+
+  this->Builder->CreateBr(header);
 
   this->Builder->SetInsertPoint(exit);
   removeSymbol(var->name);
