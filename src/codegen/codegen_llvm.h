@@ -108,17 +108,17 @@ namespace taco
         private:
         CodeGen_LLVM* parent_;
         public:
-        IndentHelper(CodeGen_LLVM* parent, const std::string& type, const std::string &info="") : 
+        IndentHelper(CodeGen_LLVM* parent, const std::string& type, const std::string &info="") :
           parent_(parent)
         {
           // ├
           //└
           for (int64_t i = 0; i < parent_->indent-1; ++i)
           {
-            std::cout << "|  ";
+            std::cout << "│  ";
           }
           if (parent_->indent > 0) {
-            std::cout << "├──[" << parent_->indent << "]";
+            std::cout << "└──[" << parent_->indent << "]";
           }
 
           std::cout << "LLVM CodeGen Visiting " << type;
