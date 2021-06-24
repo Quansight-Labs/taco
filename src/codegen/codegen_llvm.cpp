@@ -251,7 +251,12 @@ void CodeGen_LLVM::visit(const Add *op) {
   auto _ = CodeGen_LLVM::IndentHelper(this, "Add");
   auto *a = codegen(op->a);
   auto *b = codegen(op->b);
-  value = this->Builder->CreateAdd(a, b);
+  if (op->type.isFloat()){
+    value = this->Builder->CreateFAdd(a, b);
+  }
+  else {
+    value = this->Builder->CreateAdd(a, b);
+  }
 }
 
 void CodeGen_LLVM::visit(const Sub *op) {
@@ -263,7 +268,12 @@ void CodeGen_LLVM::visit(const Mul *op) {
   auto _ = CodeGen_LLVM::IndentHelper(this, "Mul");
   auto *a = codegen(op->a);
   auto *b = codegen(op->b);
-  value = this->Builder->CreateMul(a, b);
+  if (op->type.isFloat()){
+    value = this->Builder->CreateFMul(a, b);
+  }
+  else {
+    value = this->Builder->CreateMul(a, b);
+  }
 }
 
 void CodeGen_LLVM::visit(const Div *op) {
