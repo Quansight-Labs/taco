@@ -113,6 +113,7 @@ namespace taco
         {
           // ├
           //└
+          std::cout << "; ";
           for (int64_t i = 0; i < parent_->indent-1; ++i)
           {
             std::cout << "│  ";
