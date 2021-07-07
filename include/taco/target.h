@@ -10,7 +10,7 @@ namespace taco {
 struct Target {
   /// Architectures.  If C99, we generate C code, and if it is a specific
   /// machine arch (e.g. x86 or arm) we use LLVM.
-  enum Arch {C99=0, X86, ARCHS_PARAM_COUNT} arch;
+  enum Arch {C99=0, X86, ARCH_PARAM_COUNT} arch;
   
   /// Operating System.  Used when deciding which OS-specific calls to use.
   enum OS {OSUnknown=0, Linux, MacOS, Windows, OS_PARAM_COUNT} os;
@@ -28,7 +28,7 @@ struct Target {
   Target(const std::string &s);
 
   Target(Arch a, OS o) : arch(a), os(o) { 
-    taco_tassert(a < ARCHS_PARAM_COUNT && o != Windows && o != OSUnknown)
+    taco_tassert(a < ARCH_PARAM_COUNT && o != Windows && o != OSUnknown)
         << "Unsupported target.";
   }
   

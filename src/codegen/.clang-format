@@ -9,6 +9,6 @@ IndentWidth:     2
 BreakConstructorInitializers: BeforeComma
 IncludeBlocks:   Preserve
 SpaceAfterCStyleCast: true
-PointerAlignment: Right
+PointerAlignment: Left
 
 ...

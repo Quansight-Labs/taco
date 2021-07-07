@@ -58,7 +58,6 @@ void Module::compileToSource(string path, string prefix) {
     source.clear();
 
     if (target.arch == Target::C99 or !should_use_LLVM_codegen()) {
-      std::cout << "C99 codegen\n";
       std::shared_ptr<CodeGen> sourcegen =
           CodeGen::init_default(source, CodeGen::ImplementationGen);
       std::shared_ptr<CodeGen> headergen =
@@ -71,7 +70,6 @@ void Module::compileToSource(string path, string prefix) {
       }
     }
     else {
-      std::cout << "LLVM codegen\n";
       // for any other arch we use LLVM
       auto sourcegen = std::static_pointer_cast<CodeGen_LLVM>(
         CodeGen::init_default(source, CodeGen::ImplementationGen));
@@ -84,7 +82,6 @@ void Module::compileToSource(string path, string prefix) {
       }
 
       std::string bc_filename = path + prefix + ".bc";
-      std::cout << "bc_filename: " << bc_filename << "\n";
       sourcegen->writeModuleToFile(bc_filename);
       sourcegen->dumpModule();
     }
@@ -99,7 +96,6 @@ void Module::compileToSource(string path, string prefix) {
   source_file.close();
 
   ofstream header_file;
-  std::cout << "header file: " << path + prefix + ".h" << std::endl;
   header_file.open(path+prefix+".h");
   header_file << header.str();
   header_file.close();
@@ -140,9 +136,6 @@ string Module::compile() {
   string prefix = tmpdir+libname;
   string fullpath = prefix + ".so";
 
-  std::cout << "--==--==--\n";
-  std::cout << "should use LLVM codegen: " << should_use_LLVM_codegen() << "\n";
-  
   string cc;
   string cflags;
   string file_ending;
@@ -185,16 +178,13 @@ string Module::compile() {
   if (should_use_LLVM_codegen() && !moduleFromUserSource) {
     std::string bc_filename = prefix + ".bc";
     std::string object_filename = prefix + ".o";
-    string obj_cmd = "llc --filetype=obj " + bc_filename + " -o " + object_filename;
-    std::cout << obj_cmd << "\n";
+    string obj_cmd = "llc --filetype=obj --relocation-model=pic " + bc_filename + " -o " + object_filename;
 
     int err = system(obj_cmd.data());
     taco_uassert(err == 0) << "Compilation command failed:\n"
                            << obj_cmd
                            << "\nreturned " << err;
   }
-
-  std::cout << cmd << "\n";
 
   // now compile it
   int err = system(cmd.data());

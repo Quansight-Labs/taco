@@ -6,7 +6,7 @@
 
 #include "taco/error.h"
 
-inline llvm::Type *get_int_type(const int width, llvm::LLVMContext &Context) {
+inline llvm::Type* get_int_type(const int width, llvm::LLVMContext& Context) {
   switch (width) {
     case 64:
       return llvm::Type::getInt64Ty(Context);
@@ -23,7 +23,7 @@ inline llvm::Type *get_int_type(const int width, llvm::LLVMContext &Context) {
   return nullptr;
 }
 
-inline llvm::Type *get_fp_type(const int width, llvm::LLVMContext &Context) {
+inline llvm::Type* get_fp_type(const int width, llvm::LLVMContext& Context) {
   switch (width) {
     case 64:
       return llvm::Type::getDoubleTy(Context);
@@ -34,7 +34,7 @@ inline llvm::Type *get_fp_type(const int width, llvm::LLVMContext &Context) {
   return nullptr;
 }
 
-inline llvm::Type *get_fp_ptr_type(const int width, llvm::LLVMContext &Context) {
+inline llvm::Type* get_fp_ptr_type(const int width, llvm::LLVMContext& Context) {
   switch (width) {
     case 64:
       return llvm::Type::getDoublePtrTy(Context);
@@ -45,7 +45,7 @@ inline llvm::Type *get_fp_ptr_type(const int width, llvm::LLVMContext &Context) 
   return nullptr;
 }
 
-inline llvm::Type *get_int_ptr_type(const int width, llvm::LLVMContext &Context) {
+inline llvm::Type* get_int_ptr_type(const int width, llvm::LLVMContext& Context) {
   switch (width) {
     case 64:
       return llvm::Type::getInt64PtrTy(Context);
@@ -62,17 +62,17 @@ inline llvm::Type *get_int_ptr_type(const int width, llvm::LLVMContext &Context)
   return nullptr;
 }
 
-inline llvm::Type *get_void_type(llvm::LLVMContext &Context) {
+inline llvm::Type* get_void_type(llvm::LLVMContext& Context) {
   return llvm::Type::getVoidTy(Context);
 }
 
-inline llvm::Type *get_void_ptr_type(llvm::LLVMContext &Context) {
+inline llvm::Type* get_void_ptr_type(llvm::LLVMContext& Context) {
   return get_int_ptr_type(8, Context);
 }
 
-inline llvm::Value *get_int_constant(const int width,
+inline llvm::Value* get_int_constant(const int width,
                                      const int value,
-                                     llvm::LLVMContext &Context) {
+                                     llvm::LLVMContext& Context) {
   auto typ = get_int_type(width, Context);
   return llvm::ConstantInt::get(typ, value);
 }

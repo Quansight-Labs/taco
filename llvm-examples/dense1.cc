@@ -10,20 +10,26 @@ int main()
     Format list({Dense});
 
     // Create tensors
-    Tensor<double> A({3}, list);
-    Tensor<double> B({3}, list);
+    Tensor<int32_t> A({3}, list);
+    Tensor<int32_t> B({3}, list);
+    Tensor<int32_t> C({3}, list);
 
     // Insert data into B
-    B.insert({0}, 1.0);
-    B.insert({1}, 2.0);
-    B.insert({1}, 3.0);
+    B.insert({0}, (int32_t) 1);
+    B.insert({1}, (int32_t) 2);
+    B.insert({2}, (int32_t) 3);
+
+    C.insert({0}, (int32_t) 4);
+    C.insert({1}, (int32_t) 5);
+    C.insert({2}, (int32_t) 6);
 
     // Pack inserted data as described by the formats
     B.pack();
+    C.pack();
 
     // Form a tensor-vector multiplication expression
     IndexVar i;
-    A(i) = B(i);
+    A(i) = B(i) + C(i);
 
     // Compile the expression
     set_LLVM_codegen_enabled(true);
