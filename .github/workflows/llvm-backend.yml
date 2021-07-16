@@ -1,0 +1,53 @@
+name: clang-format Check
+
+on: [push, pull_request]
+
+jobs:
+  clang-format:
+    name: clang-format Check
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - uses: DoozyX/clang-format-lint-action@v0.12
+      name: Run clang-format style check for C/C++ programs.
+      with:
+        source: 'src/codegen/codegen_llvm.cpp src/codegen/codegen_llvm.h'
+        extensions: 'h,cpp,c'
+        style: file
+
+  llvm-backend:
+    name: ${{ matrix.os }} - LLVM Backend
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+
+    needs: clang-format
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Miniconda
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          mamba-version: "*"
+          channels: conda-forge,defaults
+          channel-priority: true
+          activate-environment: taco
+          environment-file: .conda/environment.yml
+
+      - name: create_build
+        run: mkdir build
+
+      - name: cmake
+        shell: bash -l {0}
+        run: cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DENABLE_TESTS=OFF -DLLVM=ON -DCMAKE_CXX_FLAGS="-fuse-ld=gold" ..
+        working-directory: build
+
+      - name: make
+        shell: bash -l {0}
+        run: make -j2
+        working-directory: build
