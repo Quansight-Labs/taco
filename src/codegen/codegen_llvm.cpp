@@ -871,7 +871,7 @@ void CodeGen_LLVM::visit(const Function* func) {
 void CodeGen_LLVM::visit(const VarDecl* op) {
   const Var* lhs = op->var.as<Var>();
   auto _ = CodeGen_LLVM::IndentHelper(this, "VarDecl", lhs->name);
-  
+
   llvm::Value* ptr = nullptr;
   if (containsSymbol(lhs->name)) {
     ptr = getSymbol(lhs->name);
@@ -880,7 +880,7 @@ void CodeGen_LLVM::visit(const VarDecl* op) {
     llvm::Type* rhs_llvm_type = llvmTypeOf(op->rhs.type());
     ptr = this->Builder->CreateAlloca(rhs_llvm_type);
   }
- 
+
   // visit op rhs to produce a value
   // codegen ensures that a LLVM value was produced
   this->Builder->CreateStore(codegen(op->rhs), ptr);
