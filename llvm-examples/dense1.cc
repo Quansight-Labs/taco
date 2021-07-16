@@ -1,6 +1,6 @@
 #include <iostream>
-#include "include/taco.h"
-#include "include/taco/llvm.h"
+#include "../include/taco.h"
+#include "../include/taco/llvm.h"
 
 using namespace taco;
 

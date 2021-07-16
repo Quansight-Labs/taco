@@ -7,8 +7,8 @@ jobs:
     name: clang-format Check
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
     - uses: DoozyX/clang-format-lint-action@v0.12
       name: Run clang-format style check for C/C++ programs.
       with:
@@ -44,10 +44,14 @@ jobs:
 
       - name: cmake
         shell: bash -l {0}
-        run: cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DENABLE_TESTS=OFF -DLLVM=ON -DCMAKE_CXX_FLAGS="-fuse-ld=gold" ..
+        run: cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DLLVM=ON -DCMAKE_CXX_FLAGS="-fuse-ld=gold" ..
         working-directory: build
 
       - name: make
         shell: bash -l {0}
         run: make -j2
         working-directory: build
+
+      - name: tests
+        shell: bash -l {0}
+        run: ./bin/taco-test --gtest_filter=llvm.*
