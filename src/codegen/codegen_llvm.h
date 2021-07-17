@@ -20,6 +20,9 @@ class CodeGen_LLVM : public CodeGen {
   std::unique_ptr<llvm::IRBuilder<>> Builder;
   llvm::Function* Func;
 
+  // Internal stuff
+  llvm::Function* getOrInsertGetIndicesFunction();
+ 
   // Symbol Table
   util::ScopedMap<const std::string, llvm::Value*> symbolTable;
 
